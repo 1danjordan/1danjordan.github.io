@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+<head>
+<title>Dan Jordan - Book Review: Introduction to Empirical Bayes</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="Dan Jordan">
+<meta name="generator" content="Hugo 0.51" />
+
+  
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+
+
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/envisioned.css">
+<link rel="stylesheet" href="/css/hugo-envisioned.css">
+<link rel="stylesheet" href="/css/hugo-envisioned-override.css">
+
+</head>
+
+
+<body>
+<div id="layout" class="pure-g">
+<article class="pure-u-1">
+<header class="brand">
+</header>
+
+<section>
+    <div id="top-of-post">
+        <a href="/"><i class="fa fa-chevron-left" aria-hidden="true";></i></a>
+        <h1 class="content-title">
+        
+        Book Review: Introduction to Empirical Bayes
+        
+        </h1>
+        
+        
+        
+    </div>
+  <span class="content-meta">
+
+    
+
+
+    
+      <i class="fa fa-calendar"></i>
+      &nbsp;Apr 3, 2017
+    
+
+
+    
+      
+      <i class="fa fa-tags"> </i>
+      
+        <a  href="/categories/r">R</a>
+      
+        <a  href="/categories/book-review">book review</a>
+      
+        <a  href="/categories/statistics">statistics</a>
+      
+        <a  href="/categories/bayesian">Bayesian</a>
+      
+    
+  </span>
+
+
+</section>
+
+
+
+<section>
+<script src="/rmarkdown-libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/plotly-binding-4.8.0/plotly.js"></script>
+<script src="/rmarkdown-libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="/rmarkdown-libs/jquery-1.11.3/jquery.min.js"></script>
+<link href="/rmarkdown-libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<link href="/rmarkdown-libs/plotly-htmlwidgets-css-1.39.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/plotly-main-1.39.2/plotly-latest.min.js"></script>
+
+
+<blockquote>
+<p>“Have you ever tried to learn math from Wikipedia?”.</p>
+</blockquote>
+<p>
+<span class="marginnote shownote"> <!--
+<div class="figure">--> <img src="/post/2017-04-03-book-review-introduction-to-empirical-bayes_files/figure-html/unnamed-chunk-1-1.png" alt=" " width="344"  /> <!--
+<p class="caption marginnote">--> <!--</p>--> <!--</div>--></span>
+</p>
+<p>This is how David Robinson opens his tremendous book <a href="https://gumroad.com/l/empirical-bayes">Introduction to Empirical Bayes</a>. This sentiment is the foundation the book builds on; learning through terse academic text is hard, learning through interactive, motivated and visual problems is fun. Robinson’s book moves at a perfect pace, within a familiar context (the R console) using an intuitive example set (baseball). In his own words, the book teaches through “a single case study: that of batting averages in baseball statistics”.</p>
+<p>As someone who studied Bayesian statistics in university and struggled with the mathematical intuition, I approached this book on <a href="https://en.wikipedia.org/wiki/Empirical_Bayes_method">Empirical Bayes</a> with hope that things would “click”. I’ve read David’s blog <a href="http://varianceexplained.org/">Variance Explained</a> for awhile now and I had read the posts (and <a href="http://stats.stackexchange.com/questions/47771/what-is-the-intuition-behind-beta-distribution">StackOverflow answers</a>) that this book originated from; so I knew David’s approach suited my learning style - motivated, interactive and plenty of graphics.</p>
+<p>This book is set in the R console. Each chapter is self contained. The data comes from the <a href="https://github.com/cdalzell/Lahman">Lahman package</a>, transformations are done with tidyr and dplyr and plotting with ggplot2, so if you are an R programmer and a user of the tidyverse then this is a perfect setting to learn interactively.</p>
+<p>Being familiar with the Tidyverse makes this <em>such</em> a pleasant experience because I can connect the math to the functions and data structures I know so well. The code below is begins every chapter. It loads baseball data and prepares it for analysis.</p>
+<pre class="r"><code>library(Lahman)
+library(dplyr)
+
+career &lt;- Batting %&gt;% 
+  filter(AB &gt; 0) %&gt;% 
+  anti_join(Pitching, by = &quot;playerID&quot;) %&gt;% 
+  group_by(playerID) %&gt;% 
+  summarize(H = sum(H), AB = sum(AB)) %&gt;% 
+  mutate(average = H / AB)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">playerID</th>
+<th align="right">H</th>
+<th align="right">AB</th>
+<th align="right">average</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">aaronha01</td>
+<td align="right">3,771</td>
+<td align="right">12,364</td>
+<td align="right">0.30</td>
+</tr>
+<tr class="even">
+<td align="left">aaronto01</td>
+<td align="right">216</td>
+<td align="right">944</td>
+<td align="right">0.23</td>
+</tr>
+<tr class="odd">
+<td align="left">abadan01</td>
+<td align="right">2</td>
+<td align="right">21</td>
+<td align="right">0.10</td>
+</tr>
+<tr class="even">
+<td align="left">abadijo01</td>
+<td align="right">11</td>
+<td align="right">49</td>
+<td align="right">0.22</td>
+</tr>
+<tr class="odd">
+<td align="left">abbated01</td>
+<td align="right">772</td>
+<td align="right">3,044</td>
+<td align="right">0.25</td>
+</tr>
+<tr class="even">
+<td align="left">abbotfr01</td>
+<td align="right">107</td>
+<td align="right">513</td>
+<td align="right">0.21</td>
+</tr>
+</tbody>
+</table>
+<p>With such a clear motivation and David’s measured, step by step explanations, it’s a joy to learn Empirical Bayes method. Presented in Tufte’s style and with beatiful plots like this, this book is a joy to the eye too. Below is a plot of 100 random batters’ Batting Average versus their shrunk Empirical Bayes Batting Average, recreated from the book.</p>
+<div id="htmlwidget-1" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"data":[{"x":[-0.05,1.05],"y":[0.260620133617141,0.260620133617141],"text":"","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(255,0,0,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0.285352316602317,0.307383040935673,0.195652173913043,0.200647249190939,0.214015151515152,0.204081632653061,0.21875,0.25,0.225913621262458,0.18796992481203,0.229787234042553,0.270588235294118,0.202020202020202,0.234323432343234,0.155555555555556,0.271577044735653,0.284219338635412,0.239147592738753,0.225118483412322,0.232,0.224716698738508,0,0.126436781609195,0,0,0.222677595628415,0.254545454545455,0.153846153846154,0.272214997832683,0.282157676348548,0.281672816728167,0.267480842911877,0.2125,0.2,0.270094134685011,0.153846153846154,0.261052631578947,0.26454367550258,0.266666666666667,0.236488699639699,0.237569060773481,0.266648545800489,0.0930232558139535,0.163636363636364,0.0476190476190476,0.26323486399532,0.186111111111111,0.0666666666666667,0.666666666666667,0.26109537299339,0.252089136490251,0.240291262135922,0.23728813559322,0.273148148148148,0.138888888888889,0.163934426229508,0.318181818181818,0.265004616805171,0.258064516129032,0.234939759036145,0.181818181818182,0.264621676891616,0.201413427561837,0.311520865104672,0.205047318611987,0,0.282331511839709,0.297297297297297,0.237237237237237,0.5,0.142857142857143,0.259219322838042,0.236772486772487,0.25,0.333333333333333,0.245720040281974,0.195046439628483,0.22093023255814,0.264084507042254,0.268777157045313,1,0.169642857142857,0.243555555555556,0.272345194732418,0,0.220720720720721,0.166666666666667,0.264744429882045,0.21875,0.226950354609929,0.214592274678112,0.0952380952380952,0.268714011516315,0.251479289940828,0.146341463414634,0.252595155709343,0.242424242424242,0.267268528238505,0.25,0.225806451612903],"y":[0.28423879143752,0.304266341030577,0.253777424119273,0.234136780042777,0.22660251035524,0.254320164056005,0.257450750088886,0.254205514757987,0.23134308906775,0.242171348551956,0.249040784877726,0.262401102043687,0.240912507507805,0.242229077925593,0.249769992056722,0.270688193755378,0.28243528977264,0.244208868593744,0.230665679505586,0.253683547475641,0.227485015118719,0.258634436342618,0.236184657212634,0.259954855300034,0.257979244339276,0.235882626391957,0.257225293483484,0.257182175929246,0.27053557841311,0.272514883459781,0.274838939802144,0.267174212151698,0.246640511278559,0.248267484585458,0.268004710931999,0.257182175929246,0.260857427843003,0.26428865668196,0.261051263045373,0.239226782457438,0.25332276025362,0.266069743570153,0.244005189857871,0.239315491644079,0.249756585271091,0.262966684571877,0.224891342054996,0.2534498796816,0.266760785492755,0.261021352788173,0.255095643949695,0.250186578257606,0.255208443593216,0.270575407606068,0.250350969772463,0.237615262166051,0.263688260251541,0.263842123854819,0.259489565055185,0.252963245163025,0.25846249813509,0.264325584804186,0.23575097329533,0.308905146715055,0.226237794979516,0.259954855300034,0.279051856789338,0.263792705632745,0.24986151903682,0.263045793191839,0.25854760267605,0.259328190954268,0.241669815692294,0.260202373813527,0.262257220074508,0.249927569767451,0.230945287756416,0.253460490242324,0.262078285309836,0.267184884891581,0.262507529599883,0.240352534196149,0.247954654009946,0.27118817078366,0.254752454943571,0.246164438502482,0.257820747541348,0.263347629957506,0.240777163590297,0.243117969364848,0.243426450978883,0.252185266907048,0.265245226886666,0.256380515048595,0.249767861100725,0.254622462160309,0.257990819373805,0.266764461151371,0.256750389285685,0.241147155036787],"text":["name: Alan Trammell","name: Joe Vosmik","name: Mike Fitzgerald","name: Tom Shopay","name: Eric Munson","name: George Lerchen","name: Tom Raftery","name: Jay Canizaro","name: Al Newman","name: Santiago Perez","name: Bubber Jonnard","name: Rance Pless","name: Gene Verble","name: Jerry Dybzinski","name: Joe Just","name: Leon Wagner","name: Jimmie Wilson","name: Chris Burke","name: John Kennedy","name: Chris Marrero","name: Gorman Thomas","name: Lew Carl","name: Jimmy Woulfe","name: Tom Walsh","name: NA Boland","name: Dud Lee","name: Al Heist","name: Walt Thomas","name: Bob Johnson","name: Charlie Silvera","name: John Radcliff","name: Mike Schmidt","name: Mickey Heath","name: Billy Otterson","name: Matt Adams","name: Strick Shofner","name: Bill Akers","name: George Cutshaw","name: Red Thomas","name: Eddie Miksis","name: Sam Harshaney","name: Charlie Irwin","name: Lee Bales","name: Bob Williams","name: Dave Huppert","name: Mitch Webster","name: Marc Sullivan","name: Allie Moulton","name: Tom Wiedenbauer","name: Randy Milligan","name: Joe Glenn","name: Dan Graham","name: Michel Hernandez","name: Wilin Rosario","name: Bill Bankston","name: A. J. Reed","name: Dave Oliver","name: Rich Coggins","name: Marshall Edwards","name: Fred Lear","name: Greg O'Halloran","name: Jack Wilson","name: Cy Rheam","name: Edgar Martinez","name: George Smith","name: Pete Cote","name: Bobby Estalella","name: Ralph Sharman","name: Stan Palys","name: Lester Dole","name: Eppie Barnes","name: Hick Carpenter","name: Ben Davis","name: Bill Kern","name: Dave Criscione","name: Felix Pie","name: Arismendy Alcantara","name: John Happenny","name: Hillis Layne","name: Cal Abrams","name: Sparrow McCaffrey","name: Ji-Man Choi","name: Frank Grube","name: Rance Mulliniks","name: Jack Robinson","name: Hal Marnie","name: Edwin Diaz","name: Justin Bour","name: Everett Booe","name: Harry Fritz","name: Tsuyoshi Nishioka","name: Andy Abad","name: Cheslor Cuthbert","name: Al Unser","name: Chris Tremie","name: Alex Presley","name: Roland Gladu","name: Matt Lawton","name: John Rainey","name: Hughie Miller"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":["rgba(86,177,247,1)","rgba(83,170,238,1)","rgba(46,96,138,1)","rgba(60,125,177,1)","rgba(70,144,202,1)","rgba(46,97,140,1)","rgba(43,91,131,1)","rgba(65,135,190,1)","rgba(75,155,217,1)","rgba(54,112,160,1)","rgba(58,120,171,1)","rgba(50,105,150,1)","rgba(57,118,168,1)","rgba(68,141,199,1)","rgba(46,96,138,1)","rgba(81,167,233,1)","rgba(81,168,235,1)","rgba(71,147,206,1)","rgba(75,155,217,1)","rgba(53,111,158,1)","rgba(81,168,234,1)","rgba(26,57,87,1)","rgba(50,105,151,1)","rgba(19,43,67,1)","rgba(28,61,92,1)","rgba(67,138,195,1)","rgba(64,132,187,1)","rgba(37,78,114,1)","rgba(76,156,219,1)","rgba(63,131,186,1)","rgba(67,140,197,1)","rgba(86,177,247,1)","rgba(55,115,163,1)","rgba(51,107,154,1)","rgba(72,148,208,1)","rgba(37,78,114,1)","rgba(63,131,186,1)","rgba(83,171,238,1)","rgba(43,90,130,1)","rgba(78,161,225,1)","rgba(56,116,166,1)","rgba(79,164,229,1)","rgba(45,95,137,1)","rgba(52,109,156,1)","rgba(40,85,123,1)","rgba(79,162,228,1)","rgba(61,127,180,1)","rgba(38,80,117,1)","rgba(31,67,99,1)","rgba(75,155,217,1)","rgba(66,138,194,1)","rgba(62,129,183,1)","rgba(53,110,157,1)","rgba(72,149,210,1)","rgba(44,92,133,1)","rgba(53,110,158,1)","rgba(40,85,124,1)","rgba(70,144,203,1)","rgba(60,125,177,1)","rgba(55,115,164,1)","rgba(35,75,111,1)","rgba(82,168,235,1)","rgba(59,123,175,1)","rgba(85,175,244,1)","rgba(66,136,192,1)","rgba(19,43,67,1)","rgba(75,155,218,1)","rgba(44,93,134,1)","rgba(61,126,178,1)","rgba(28,61,92,1)","rgba(32,69,102,1)","rgba(81,167,234,1)","rgba(72,149,210,1)","rgba(38,81,118,1)","rgba(34,73,107,1)","rgba(69,143,201,1)","rgba(60,125,178,1)","rgba(50,105,151,1)","rgba(59,123,175,1)","rgba(73,150,211,1)","rgba(19,43,67,1)","rgba(52,109,156,1)","rgba(70,145,204,1)","rgba(79,163,228,1)","rgba(34,73,107,1)","rgba(57,120,170,1)","rgba(36,77,112,1)","rgba(67,139,196,1)","rgba(61,127,179,1)","rgba(62,129,183,1)","rgba(58,120,171,1)","rgba(40,85,123,1)","rgba(64,133,188,1)","rgba(61,126,179,1)","rgba(45,94,136,1)","rgba(70,145,204,1)","rgba(48,101,145,1)","rgba(81,168,235,1)","rgba(58,120,170,1)","rgba(64,132,187,1)"],"opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":["rgba(86,177,247,1)","rgba(83,170,238,1)","rgba(46,96,138,1)","rgba(60,125,177,1)","rgba(70,144,202,1)","rgba(46,97,140,1)","rgba(43,91,131,1)","rgba(65,135,190,1)","rgba(75,155,217,1)","rgba(54,112,160,1)","rgba(58,120,171,1)","rgba(50,105,150,1)","rgba(57,118,168,1)","rgba(68,141,199,1)","rgba(46,96,138,1)","rgba(81,167,233,1)","rgba(81,168,235,1)","rgba(71,147,206,1)","rgba(75,155,217,1)","rgba(53,111,158,1)","rgba(81,168,234,1)","rgba(26,57,87,1)","rgba(50,105,151,1)","rgba(19,43,67,1)","rgba(28,61,92,1)","rgba(67,138,195,1)","rgba(64,132,187,1)","rgba(37,78,114,1)","rgba(76,156,219,1)","rgba(63,131,186,1)","rgba(67,140,197,1)","rgba(86,177,247,1)","rgba(55,115,163,1)","rgba(51,107,154,1)","rgba(72,148,208,1)","rgba(37,78,114,1)","rgba(63,131,186,1)","rgba(83,171,238,1)","rgba(43,90,130,1)","rgba(78,161,225,1)","rgba(56,116,166,1)","rgba(79,164,229,1)","rgba(45,95,137,1)","rgba(52,109,156,1)","rgba(40,85,123,1)","rgba(79,162,228,1)","rgba(61,127,180,1)","rgba(38,80,117,1)","rgba(31,67,99,1)","rgba(75,155,217,1)","rgba(66,138,194,1)","rgba(62,129,183,1)","rgba(53,110,157,1)","rgba(72,149,210,1)","rgba(44,92,133,1)","rgba(53,110,158,1)","rgba(40,85,124,1)","rgba(70,144,203,1)","rgba(60,125,177,1)","rgba(55,115,164,1)","rgba(35,75,111,1)","rgba(82,168,235,1)","rgba(59,123,175,1)","rgba(85,175,244,1)","rgba(66,136,192,1)","rgba(19,43,67,1)","rgba(75,155,218,1)","rgba(44,93,134,1)","rgba(61,126,178,1)","rgba(28,61,92,1)","rgba(32,69,102,1)","rgba(81,167,234,1)","rgba(72,149,210,1)","rgba(38,81,118,1)","rgba(34,73,107,1)","rgba(69,143,201,1)","rgba(60,125,178,1)","rgba(50,105,151,1)","rgba(59,123,175,1)","rgba(73,150,211,1)","rgba(19,43,67,1)","rgba(52,109,156,1)","rgba(70,145,204,1)","rgba(79,163,228,1)","rgba(34,73,107,1)","rgba(57,120,170,1)","rgba(36,77,112,1)","rgba(67,139,196,1)","rgba(61,127,179,1)","rgba(62,129,183,1)","rgba(58,120,171,1)","rgba(40,85,123,1)","rgba(64,133,188,1)","rgba(61,126,179,1)","rgba(45,94,136,1)","rgba(70,145,204,1)","rgba(48,101,145,1)","rgba(81,168,235,1)","rgba(58,120,170,1)","rgba(64,132,187,1)"]}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-0.05,1.05],"y":[-0.05,1.05],"text":"","type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(255,0,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0],"y":[0.24],"name":"99_a5f1b78ac06a972c4d624d9e5588512e","type":"scatter","mode":"markers","opacity":0,"hoverinfo":"none","showlegend":false,"marker":{"color":[0,1],"colorscale":[[0,"#132B43"],[0.0526315789473684,"#16314B"],[0.105263157894737,"#193754"],[0.157894736842105,"#1D3E5C"],[0.210526315789474,"#204465"],[0.263157894736842,"#234B6E"],[0.315789473684211,"#275277"],[0.368421052631579,"#2A5980"],[0.421052631578947,"#2E608A"],[0.473684210526316,"#316793"],[0.526315789473684,"#356E9D"],[0.578947368421053,"#3875A6"],[0.631578947368421,"#3C7CB0"],[0.684210526315789,"#3F83BA"],[0.736842105263158,"#438BC4"],[0.789473684210526,"#4792CE"],[0.842105263157895,"#4B9AD8"],[0.894736842105263,"#4EA2E2"],[0.947368421052632,"#52A9ED"],[1,"#56B1F7"]],"colorbar":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"thickness":23.04,"title":"AB","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"tickmode":"array","ticktext":["10","100","1000"],"tickvals":[0.254985574486183,0.509971148972366,0.764956723458549],"tickfont":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"ticklen":2,"len":0.5}},"xaxis":"x","yaxis":"y","frame":null}],"layout":{"margin":{"t":26.2283105022831,"r":7.30593607305936,"b":40.1826484018265,"l":48.9497716894977},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.05,1.05],"tickmode":"array","ticktext":["0.00","0.25","0.50","0.75","1.00"],"tickvals":[0,0.25,0.5,0.75,1],"categoryorder":"array","categoryarray":["0.00","0.25","0.50","0.75","1.00"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.65296803652968,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":"Batting average","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.220690651821993,0.313105836948058],"tickmode":"array","ticktext":["0.24","0.26","0.28","0.30"],"tickvals":[0.24,0.26,0.28,0.3],"categoryorder":"array","categoryarray":["0.24","0.26","0.28","0.30"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.65296803652968,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":"Empirical Bayes batting average","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false},"source":"A","attrs":{"1ba773fb7857":{"yintercept":{},"type":"scatter"},"1ba77a600841":{"x":{},"y":{},"colour":{},"name":{}},"1ba7518f0bf0":{"intercept":{},"slope":{}}},"cur_data":"1ba773fb7857","visdat":{"1ba773fb7857":["function (y) ","x"],"1ba77a600841":["function (y) ","x"],"1ba7518f0bf0":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":[]}</script>
+<p>David offers this book for a ‘fair price’, meaning you can pay what you think is fair (even free), but this book is <strong>is worth paying for</strong>. The small price I paid ($15) was paid back in applied knowledge and useful code many times over.</p>
+</section>
+<section>
+  
+
+  <footer class="page-footer">
+		<hr>
+		<ul class="page-footer-menu">
+		
+      <li><a href="https://github.com/dandermotj/"><i class='fa fa-github fa-2x'></i> </a></li>
+		
+      <li><a href="https://twitter.com/1danjordan"><i class='fa fa-twitter fa-2x'></i> </a></li>
+		
+		</ul>
+
+  
+    <p>
+      Powered by <a href="https://gohugo.io">Hugo</a> and the
+      <a href="https://github.com/dandermotj/hugo-envisioned">Envisioned theme</a>.
+    </p>
+  
+
+	<div class="copyright">
+	<p>
+    
+      &copy; 2018
+    Copyright Holder.
+    All rights reserved.
+    
+  </p>
+</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script>
+hljs.configure({languages: []});
+hljs.initHighlightingOnLoad();
+</script>
+
+</section>
+</article>
+</div>
+</body>
+</html>

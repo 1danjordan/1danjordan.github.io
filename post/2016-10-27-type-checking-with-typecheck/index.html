@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+<head>
+<title>Dan Jordan - Type Checking in R with TypeCheck</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="Dan Jordan">
+<meta name="generator" content="Hugo 0.51" />
+
+  
+  
+
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    menuSettings: { zoom: "Double-Click" },
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+
+
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/envisioned.css">
+<link rel="stylesheet" href="/css/hugo-envisioned.css">
+<link rel="stylesheet" href="/css/hugo-envisioned-override.css">
+
+</head>
+
+
+<body>
+<div id="layout" class="pure-g">
+<article class="pure-u-1">
+<header class="brand">
+</header>
+
+<section>
+    <div id="top-of-post">
+        <a href="/"><i class="fa fa-chevron-left" aria-hidden="true";></i></a>
+        <h1 class="content-title">
+        
+        Type Checking in R with TypeCheck
+        
+        </h1>
+        
+        
+        
+    </div>
+  <span class="content-meta">
+
+    
+
+
+    
+      <i class="fa fa-calendar"></i>
+      &nbsp;Oct 27, 2016
+    
+
+
+    
+      
+      <i class="fa fa-tags"> </i>
+      
+        <a  href="/categories/r">R</a>
+      
+        <a  href="/categories/types">types</a>
+      
+    
+  </span>
+
+
+</section>
+
+
+
+<section>
+
+
+<p>Jim Hester’s <a href="https://www.github.com/jimhester/typeCheck">TypeCheck</a> package brings type checking to R in a simple and elegant way and provides meaningful error messages out of the box. TypeCheck is built on the <code>?</code> operator from Hester’s <a href="https://www.github.com/jimhester/types">types</a> package.</p>
+<p>R is a dynamically typed language. Being dynamically typed is an important and necessary design choice for R as an interactive programming environment. However, the option to enforce types makes larger, more complicated codebases easier to debug and expand.</p>
+<pre class="r"><code># install.packages(&quot;types&quot;)
+library(types)
+# devtools::install_github(&quot;jim_hester/typeCheck&quot;)
+library(typeCheck)</code></pre>
+<p>An annotated function looks like this</p>
+<pre class="r"><code>f &lt;- function(x = ? numeric) x + 1
+f(1)</code></pre>
+<pre><code>## [1] 2</code></pre>
+<p>Right now the function is only annotated, but this annotation doesn’t do anything yet - we haven’t defined a <code>numeric</code> type and the function is not type checked. We define a type with <code>type_define</code> and type check a function with <code>type_check</code>.</p>
+<div id="using-type_define-type_check" class="section level3">
+<h3>Using type_define &amp; type_check</h3>
+<pre class="r"><code>type.numeric   &lt;- type_define(check = is.numeric)
+f_type_checked &lt;- type_check(f)</code></pre>
+<p><code>type</code> is an S3 generic, and here we’re defining the <code>type.numeric</code> method. In our case we are checking that the object is numeric with the <code>is.numeric</code> primitive.</p>
+<p>Let’s try our <code>f_type_checked</code> function with some different inputs.</p>
+<pre class="r"><code>f_type_checked(1)</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>f_type_checked(&quot;a&quot;)</code></pre>
+<pre><code>## Error: `x` is a `character` not a `numeric`.</code></pre>
+<pre class="r"><code>f_type_checked(TRUE)</code></pre>
+<pre><code>## Error: `x` is a `logical` not a `numeric`.</code></pre>
+<p>We get really clear and explicit error messages straight away, making it easy to see what is going wrong in our code.</p>
+</div>
+<div id="creating-your-own-types" class="section level3">
+<h3>Creating Your Own Types</h3>
+<p>Given R is a statistical programming language, probabilities are a fundamental ‘data type’ used and encountered. For example, the quantile family of functions (<code>qnorm</code>, <code>qunif</code>, <code>qpois</code>, …) all expect a probability as their first argument, but by passing non probabilities <code>NaN</code>s are returned with unhelpful warning messages.</p>
+<pre class="r"><code>qnorm(2)</code></pre>
+<pre><code>## Warning in qnorm(2): NaNs produced</code></pre>
+<pre><code>## [1] NaN</code></pre>
+<pre class="r"><code>qunif(-3)</code></pre>
+<pre><code>## Warning in qunif(-3): NaNs produced</code></pre>
+<pre><code>## [1] NaN</code></pre>
+<p>Let’s make a probability type to prevent this sort of issue. A probability is quantified as a number between 0 and 1 inclusive: <span class="math inline">\(p \in [0,1]\)</span>. So there are two constraints on the <code>probability</code> type:</p>
+<ol style="list-style-type: decimal">
+<li>the object is a number</li>
+<li>the object is on the closed interval between 0 and 1</li>
+</ol>
+<p>Both of these constraints must be met in order to satisfy our probability type. We’ll use the <code>all(...)</code> function to capture this. <code>all</code> is a predicate that tests whether all it’s inputs are true, and returns true if they are and false otherwise. We also want to make sure vectors of probabilities are valid for vectorised functions. So we’ll use <code>all</code> again to test whether all the values in a vector are in the correct range.</p>
+<pre class="r"><code>type.probability &lt;- type_define(
+  check = function(x) {
+    all(
+      # x is a numeric vector
+      is.numeric(x),
+      # all elements in x are on the interval [0,1]
+      all(x &gt;= 0 &amp; x &lt;=1)
+      )
+  })
+
+f &lt;- function(x = ? probability) x
+f &lt;- type_check(f)
+
+# Test that the type works
+f(0.3)</code></pre>
+<pre><code>## [1] 0.3</code></pre>
+<pre class="r"><code>f(c(0.5, 0.2, 1))</code></pre>
+<pre><code>## [1] 0.5 0.2 1.0</code></pre>
+<pre class="r"><code>f(c(0.5, 2))</code></pre>
+<pre><code>## Error: `x` is a `double` not a `probability`.</code></pre>
+<pre class="r"><code>f(&quot;a&quot;)</code></pre>
+<pre><code>## Error: `x` is a `character` not a `probability`.</code></pre>
+<pre class="r"><code>f(TRUE)</code></pre>
+<pre><code>## Error: `x` is a `logical` not a `probability`.</code></pre>
+<p>The little tests show the probability type does what we want it to. Now we can annotate our code with probability types! Here’s a simple function that computes the joint probability of two independent events.</p>
+<p><span class="math display">\[
+P(A \cap B) = P(A)P(B)
+\]</span></p>
+<p>Given this function will always return a probability (the product of two probabilities is always a probability) it’s not neccesary to type check the function output but we’ll annotate the function to return a <code>probability</code> anyway.</p>
+<pre class="r"><code>joint_prob &lt;- function(x = 0.5 ? probability, y = 0.5 ? probability) {
+  x * y
+} ? probability
+
+joint_prob &lt;- type_check(joint_prob)
+
+joint_prob(0.3, 0.6)</code></pre>
+<pre><code>## [1] 0.18</code></pre>
+<pre class="r"><code>joint_prob(1.5, 0.5)</code></pre>
+<pre><code>## Error: `x` is a `double` not a `probability`.</code></pre>
+<pre class="r"><code>joint_prob(0.1, 4)</code></pre>
+<pre><code>## Error: `y` is a `double` not a `probability`.</code></pre>
+<p>TypeCheck’s error messages are very handy, telling us which argument didn’t adhere to it’s type constraints. This makes debugging much easier!</p>
+<p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote"><span style="display: block;"><span class="math display"><span class="math display">\[Pr(X = k) = {n \choose k} p^k (1 - p)^{n-k}\]</span></span></span> <span style="display: block;">Where <span class="math inline"><span class="math inline">\(k\)</span></span> is the number of successes, <span class="math inline"><span class="math inline">\(n\)</span></span> the number of trials and <span class="math inline"><span class="math inline">\(p\)</span></span> is a probability.</span></span></p>
+<p>Let’s go further, by writing a typed <a href="https://en.wikipedia.org/wiki/Binomial_distribution">binomial distribution function</a>. The equivalent function in base R is <code>dbinom</code>.</p>
+<p>We have the <code>probability</code> type, but we now we need a type that describes the trial or event appropriately. This type must be non-negative because we can’t have negative events occuring, and it must be a whole number because there’s no such thing as 1.5 events happening. We’ll call this type <code>natural</code> after the set of <a href="https://en.wikipedia.org/wiki/Natural_number">Natural numbers</a>.</p>
+<pre class="r"><code>type.natural &lt;- type_define(
+  check = function(x) {
+    all(
+      # is whole
+      all(x %% 1 == 0),
+      # isn&#39;t negative
+      all(x &gt;= 0)
+    )
+  }
+)</code></pre>
+<p>Now we have everything we need for our typed binomial distribution function.</p>
+<pre class="r"><code>binom_dist &lt;- function(p = ? probability, k = ? natural, n = ? natural) {
+  choose(n, k) * p^k * (1 - p)^(n - k)
+} ? probability
+
+binom_dist &lt;- type_check(binom_dist)
+
+binom_dist(0.5, 1, 1)</code></pre>
+<pre><code>## [1] 0.5</code></pre>
+<pre class="r"><code>binom_dist(2L, 1, 1)</code></pre>
+<pre><code>## Error: `p` is a `integer` not a `probability`.</code></pre>
+<pre class="r"><code>binom_dist(0.5, -2, 0)</code></pre>
+<pre><code>## Error: `k` is a `double` not a `natural`.</code></pre>
+</div>
+<div id="conclusion" class="section level3">
+<h3>Conclusion</h3>
+<p>The use of the <code>?</code> operator is very elegant in allowing us to annotate code, making code more expressive and deliberate as well as providing us with clear error messages when something goes wrong.</p>
+<p>I see TypeCheck as another step in R’s evolution, introducing a new tool that, like magrittr’s <code>%&gt;%</code> pipe, could fundamentally change the style of programming in R.</p>
+</div>
+</section>
+<section>
+  
+
+  <footer class="page-footer">
+		<hr>
+		<ul class="page-footer-menu">
+		
+      <li><a href="https://github.com/dandermotj/"><i class='fa fa-github fa-2x'></i> </a></li>
+		
+      <li><a href="https://twitter.com/1danjordan"><i class='fa fa-twitter fa-2x'></i> </a></li>
+		
+		</ul>
+
+  
+    <p>
+      Powered by <a href="https://gohugo.io">Hugo</a> and the
+      <a href="https://github.com/dandermotj/hugo-envisioned">Envisioned theme</a>.
+    </p>
+  
+
+	<div class="copyright">
+	<p>
+    
+      &copy; 2018
+    Copyright Holder.
+    All rights reserved.
+    
+  </p>
+</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script>
+hljs.configure({languages: []});
+hljs.initHighlightingOnLoad();
+</script>
+
+</section>
+</article>
+</div>
+</body>
+</html>

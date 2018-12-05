@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Collatz on Dan Jordan</title>
+    <link>/categories/collatz/</link>
+    <description>Recent content in Collatz on Dan Jordan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 21 May 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/collatz/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Visualising Collatz</title>
+      <link>/post/2017-05-21-visualising-collatz/</link>
+      <pubDate>Sun, 21 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2017-05-21-visualising-collatz/</guid>
+      <description>Visualising Collatz In previous posts I used the Collatz conjecture as an example for writing:
+ safe recursion and memoisation tidy summary functions  Now I’m going to build further on this example and finally visualise the hailstone sequence. I’m going to use ggplot and Plotly’s R package plotly to create some really nice interactive charts. The plotly package is the easiest way to turning your graphs from static to interactive, and the ggplot to plotly conversion is perfect in nearly all the times I’ve used it.</description>
+    </item>
+    
+    <item>
+      <title>Tidy Summary Functions with Collatz</title>
+      <link>/post/2016-12-05-tidy-summary-with-collatz/</link>
+      <pubDate>Mon, 05 Dec 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2016-12-05-tidy-summary-with-collatz/</guid>
+      <description>⊕The chart below is a directed graph showing the orbits of the first 1,000 numbers of the Collatz sequence
+ -- -- -- In a previous post I wrote about recursion in R and used the Collatz sequence as a case study. Now I want to further this case study into tidy summary functions.
+I’ve been thinking about what a modern summary function should look like. Summaries for objects like model outputs and data frames are useful for looking at in the console, but it’s hard to compute with them.</description>
+    </item>
+    
+    <item>
+      <title>Recursion in R with Collatz</title>
+      <link>/post/2016-11-15-recursion-in-r-with-collatz/</link>
+      <pubDate>Sat, 15 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2016-11-15-recursion-in-r-with-collatz/</guid>
+      <description>The Collatz Conjecture Recently I was watching Numberphile’s video on the Collatz Conjecture.
+ It got me thinking about how I would generate the hailstone sequence in R. This sequence is interesting because it is recursive, the length of the vector outputted is unknown and it always returns to 1. Recursion is not commonly seen in R unlike other functional languages like Scala or Haskell where you can’t turn around without knocking into it.</description>
+    </item>
+    
+  </channel>
+</rss>

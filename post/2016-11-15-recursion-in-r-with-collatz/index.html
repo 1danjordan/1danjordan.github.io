@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+<head>
+<title>Dan Jordan - Recursion in R with Collatz</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="Dan Jordan">
+<meta name="generator" content="Hugo 0.51" />
+
+  
+  
+
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    menuSettings: { zoom: "Double-Click" },
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+
+
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/envisioned.css">
+<link rel="stylesheet" href="/css/hugo-envisioned.css">
+<link rel="stylesheet" href="/css/hugo-envisioned-override.css">
+
+</head>
+
+
+<body>
+<div id="layout" class="pure-g">
+<article class="pure-u-1">
+<header class="brand">
+</header>
+
+<section>
+    <div id="top-of-post">
+        <a href="/"><i class="fa fa-chevron-left" aria-hidden="true";></i></a>
+        <h1 class="content-title">
+        
+        Recursion in R with Collatz
+        
+        </h1>
+        
+        
+        
+    </div>
+  <span class="content-meta">
+
+    
+
+
+    
+      <i class="fa fa-calendar"></i>
+      &nbsp;Oct 15, 2016
+    
+
+
+    
+      
+      <i class="fa fa-tags"> </i>
+      
+        <a  href="/categories/collatz">Collatz</a>
+      
+        <a  href="/categories/r">R</a>
+      
+        <a  href="/categories/recursion">recursion</a>
+      
+        <a  href="/categories/memoisation">memoisation</a>
+      
+    
+  </span>
+
+
+</section>
+
+
+
+<section>
+
+
+<div id="the-collatz-conjecture" class="section level2">
+<h2>The Collatz Conjecture</h2>
+<p>Recently I was watching <a href="https://www.youtube.com/watch?v=5mFpVDpKX70">Numberphile’s video</a> on the <a href="https://en.wikipedia.org/wiki/Collatz_conjecture">Collatz Conjecture</a>.</p>
+<iframe src="https://www.youtube.com/embed/5mFpVDpKX70" width="420" height="315" frameborder="0" allowfullscreen=""></iframe>
+<p>It got me thinking about how I would generate the hailstone sequence in R. This sequence is interesting because it is recursive, the length of the vector outputted is unknown and it always returns to 1. Recursion is not commonly seen in R unlike other functional languages like Scala or Haskell where you can’t turn around without knocking into it. I won’t get into an explanation of what this sequence is - just watch the video. I could never do as well as Numberphile.</p>
+<p>The challenge of writing a <code>collatz</code> function that computes the sequence gave me the opportunity to think about and explore a few things in R:</p>
+<ul>
+<li>recursion</li>
+<li>memoisation</li>
+<li>tidy <code>summary</code> functions</li>
+</ul>
+<p>This article focuses on recursion and memoisation. I’ll start by writing the simplest recursive <code>collatz</code> function I can and then iteratively improve it.</p>
+</div>
+<div id="basic-recursion" class="section level2">
+<h2>Basic Recursion</h2>
+<p>This is the Collatz function:</p>
+<p><span class="math display">\[
+f\left( n\right) = 
+  \begin{cases} 
+    \dfrac {n} {2},&amp; \text{if } n \equiv 0 \mod 2 \\
+    3n + 1,&amp;  \text{if } n \equiv 1 \mod 2 
+  \end{cases}
+\]</span></p>
+<p>For example, starting with the odd number 5, times by 3 and add 1, we get the even number 16, divide by 2 we get 4, divide by 2, we get 2 and finally 1.</p>
+<p>Once the sequence reaches 1, it will cycle between 1 and 2: <span class="math inline">\(f(1) = 2, \ f(2) = 1, \ ...\)</span>. We’ll just terminate the sequence once it reaches 1. Here’s our first attempt at <code>collatz</code>:</p>
+<pre class="r"><code>collatz1 &lt;- function(x){
+    n &lt;- tail(x, 1)
+    
+    if (n == 1) return(x)
+    else if(n %% 2 == 0) collatz1(c(x, n / 2))
+    else collatz1(c(x, 3 * n + 1))
+}
+
+collatz1(6)</code></pre>
+<pre><code>## [1]  6  3 10  5 16  8  4  2  1</code></pre>
+<p>Simple recursion in R is easy. We just call the function inside itself. But calling a function inside itself is not a safe form of recursion. To illustrate, here’s a simple function that print the numbers from <code>n</code> to <code>0</code>.</p>
+<pre class="r"><code>f &lt;- function(n) {
+  print(n)
+  if(n &gt; 0) f(n - 1)
+  else if(n &lt; 0) f(n + 1)
+}
+f(5)</code></pre>
+<pre><code>## [1] 5
+## [1] 4
+## [1] 3
+## [1] 2
+## [1] 1
+## [1] 0</code></pre>
+<p>We just call <code>f</code> inside <code>f</code>, however if we rename <code>f</code> in the global environment, the recursive calls inside the renamed function will still call <code>f</code>, breaking the function!</p>
+<pre class="r"><code>ff &lt;- f
+rm(f)
+ff(5)</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre><code>## Error in f(n - 1): could not find function &quot;f&quot;</code></pre>
+<p>Clearly, this form of recursion is not recommended because it is brittle. Instead, base R offers us <code>Recall</code>, a placeholder for the name of the function in which it is called. Now we can’t break this function by renaming with it.</p>
+<pre class="r"><code>f &lt;- function(n) {
+  print(n)
+  if (n &gt; 0) Recall(n - 1)
+  else if(n &lt; 0) Recall(n + 1)
+}
+ff &lt;- f; rm(f) # rename function and delete f
+ff(-5)</code></pre>
+<pre><code>## [1] -5
+## [1] -4
+## [1] -3
+## [1] -2
+## [1] -1
+## [1] 0</code></pre>
+<p>Now <code>ff</code> will still work. This is the first lesson in using recursion in R: use <code>Recall</code>.</p>
+<pre class="r"><code>collatz2 &lt;- function(x = ? natural) {
+    n &lt;- tail(x, 1)
+    
+    if (n == 1) return(x)
+    else if(n %% 2 == 0) Recall(c(x, n / 2))
+    else Recall(c(x, 3 * n + 1))
+}
+collatz2(7)</code></pre>
+<pre><code>##  [1]  7 22 11 34 17 52 26 13 40 20 10  5 16  8  4  2  1</code></pre>
+<p>Given we want to analyse the sequence, let’s vectorise <code>collatz</code> so we can compute the sequences for many values of n at a time and add a class. We’re just going to use <code>purrr::map</code> for vectorisation. I don’t even want to start thinking about we would go about formally vectorising a recursive function like this!</p>
+<pre class="r"><code>collatz3 &lt;- function(x = ? natural) {
+    .f &lt;- function(x) {
+    n &lt;- tail(x, 1)
+    if (n == 1) return(x)
+    else if(n %% 2 == 0) Recall(c(x, n / 2))
+    else Recall(c(x, 3 * n + 1))
+  }
+  
+  map(x, .f) %&gt;% structure(class = &quot;collatz&quot;)
+}
+collatz3(5:9)</code></pre>
+<pre><code>## [[1]]
+## [1]  5 16  8  4  2  1
+## 
+## [[2]]
+## [1]  6  3 10  5 16  8  4  2  1
+## 
+## [[3]]
+##  [1]  7 22 11 34 17 52 26 13 40 20 10  5 16  8  4  2  1
+## 
+## [[4]]
+## [1] 8 4 2 1
+## 
+## [[5]]
+##  [1]  9 28 14  7 22 11 34 17 52 26 13 40 20 10  5 16  8  4  2  1
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;collatz&quot;</code></pre>
+<p>Now we have a safe, vectorised <code>collatz</code> function. But there’s one caveat - it’s not very fast or efficient…</p>
+</div>
+<div id="memoisation" class="section level2">
+<h2>Memoisation</h2>
+<p>Examining the sequence for the first 8 values of the function, there’s a key pattern.</p>
+<pre class="r"><code>collatz3(1:8) %&gt;% map(rev) %&gt;% str</code></pre>
+<pre><code>## List of 8
+##  $ : int 1
+##  $ : num [1:2] 1 2
+##  $ : num [1:8] 1 2 4 8 16 5 10 3
+##  $ : num [1:3] 1 2 4
+##  $ : num [1:6] 1 2 4 8 16 5
+##  $ : num [1:9] 1 2 4 8 16 5 10 3 6
+##  $ : num [1:17] 1 2 4 8 16 5 10 20 40 13 ...
+##  $ : num [1:4] 1 2 4 8</code></pre>
+<p>Notice something? The sequence ends the same every time: <code>1, 2, 4, 8, 16</code>. Obviously once the sequence hits any value of the form <span class="math inline">\(2^n\)</span>, the sequence plummets to 1.</p>
+<p>This convergence of the sequence to the same “path” means every time we compute the sequence for many values, we are spending a lot of time <em>recomputing</em> results we already have. For example, if we evaluate <code>collatz(4)</code> we get <code>4, 2, 1</code>. Then if we evaluate <code>collatz(8)</code>, we recompute <code>4, 2, 1</code>. We’ve already computed this so why would we recompute? Recursive functions aren’t very fast in R, but there are ways of speeding this up: memoisation.</p>
+<p>Memoising the function gives it “memory”, by caching what it has computed before and using those remembered results. This is easy using the <code>memoise</code> function from the <a href="https://github.com/hadley/memoise">memoise</a> package.</p>
+<pre class="r"><code>collatz4 &lt;- memoise::memoise(collatz3)
+collatz4(5)</code></pre>
+<pre><code>## [[1]]
+## [1]  5 16  8  4  2  1
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;collatz&quot;</code></pre>
+<p>It’s as easy as that! This greatly improves the performance of <code>collatz</code>.</p>
+</div>
+<div id="performance" class="section level2">
+<h2>Performance</h2>
+<p>Let’s compare the performance of the many versions of <code>collatz</code> we’ve written with <code>microbenchmark</code>.</p>
+<pre class="r"><code>n &lt;- 1:100
+benchmark &lt;- microbenchmark::microbenchmark(
+  map(n, collatz1),
+  map(n, collatz2),
+  collatz3(n),
+  collatz4(n)
+)
+
+ggplot2::autoplot(benchmark)</code></pre>
+<p><img src="/post/2016-11-15-recursion-in-r-with-collatz_files/figure-html/benchmark-1.png" width="672" /></p>
+<p>The memoised function is many times faster than the other functions. The relative performance of <code>collatz4</code> will increase as we compute more initial values, because it will “remember” more of the reoccurring sequence. Interestingly, the safer <code>collatz</code> that utilises <code>Recall</code> is slower than the simpler (but unsafe!) recursive calls.</p>
+</div>
+<div id="how-to-recurse" class="section level2">
+<h2>How to Recurse</h2>
+<p>So there’s two key lessons learned in using recursion in R:</p>
+<ol style="list-style-type: decimal">
+<li>use <code>Recall</code></li>
+<li>if you’re function is slow memoise it with <code>memoise</code></li>
+</ol>
+</div>
+</section>
+<section>
+  
+
+  <footer class="page-footer">
+		<hr>
+		<ul class="page-footer-menu">
+		
+      <li><a href="https://github.com/dandermotj/"><i class='fa fa-github fa-2x'></i> </a></li>
+		
+      <li><a href="https://twitter.com/1danjordan"><i class='fa fa-twitter fa-2x'></i> </a></li>
+		
+		</ul>
+
+  
+    <p>
+      Powered by <a href="https://gohugo.io">Hugo</a> and the
+      <a href="https://github.com/dandermotj/hugo-envisioned">Envisioned theme</a>.
+    </p>
+  
+
+	<div class="copyright">
+	<p>
+    
+      &copy; 2018
+    Copyright Holder.
+    All rights reserved.
+    
+  </p>
+</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script>
+hljs.configure({languages: []});
+hljs.initHighlightingOnLoad();
+</script>
+
+</section>
+</article>
+</div>
+</body>
+</html>

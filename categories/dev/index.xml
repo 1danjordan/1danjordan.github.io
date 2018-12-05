@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dev on Dan Jordan</title>
+    <link>/categories/dev/</link>
+    <description>Recent content in Dev on Dan Jordan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Thu, 27 Oct 2016 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/dev/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Type Checking in R with TypeCheck</title>
+      <link>/post/2016-10-27-type-checking-with-typecheck/</link>
+      <pubDate>Thu, 27 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2016-10-27-type-checking-with-typecheck/</guid>
+      <description>Jim Hester’s TypeCheck package brings type checking to R in a simple and elegant way and provides meaningful error messages out of the box. TypeCheck is built on the ? operator from Hester’s types package.
+R is a dynamically typed language. Being dynamically typed is an important and necessary design choice for R as an interactive programming environment. However, the option to enforce types makes larger, more complicated codebases easier to debug and expand.</description>
+    </item>
+    
+  </channel>
+</rss>

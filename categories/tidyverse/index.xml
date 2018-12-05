@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tidyverse on Dan Jordan</title>
+    <link>/categories/tidyverse/</link>
+    <description>Recent content in Tidyverse on Dan Jordan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Mon, 05 Dec 2016 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/tidyverse/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Tidy Summary Functions with Collatz</title>
+      <link>/post/2016-12-05-tidy-summary-with-collatz/</link>
+      <pubDate>Mon, 05 Dec 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2016-12-05-tidy-summary-with-collatz/</guid>
+      <description>⊕The chart below is a directed graph showing the orbits of the first 1,000 numbers of the Collatz sequence
+ -- -- -- In a previous post I wrote about recursion in R and used the Collatz sequence as a case study. Now I want to further this case study into tidy summary functions.
+I’ve been thinking about what a modern summary function should look like. Summaries for objects like model outputs and data frames are useful for looking at in the console, but it’s hard to compute with them.</description>
+    </item>
+    
+  </channel>
+</rss>

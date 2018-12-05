@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docker on Dan Jordan</title>
+    <link>/categories/docker/</link>
+    <description>Recent content in Docker on Dan Jordan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 21 May 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/docker/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Releasing Experimental-R 3.4</title>
+      <link>/post/2017-05-04-experimental-r/</link>
+      <pubDate>Sun, 21 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2017-05-04-experimental-r/</guid>
+      <description>Recently I’ve been delving into the depths of R, while learning Docker and even getting to know Linux much better. The result is Experimental-R, a docker image with an experimental build of R 3.4. Below is Experimental-R’s README, read on for details!
+Experimental-R git clone https://github.com/dandermotj/experimental-r.git cd experimental-r docker build -t experimental-r . docker run --rm -ti experimental-r experimental-r-demo
+ Experimental-R contains Dockerfiles for customised R builds. Inspired by the Rocker project, Experimental-R conveniently lets users try out experimental R builds without having to compile R from source themselves.</description>
+    </item>
+    
+  </channel>
+</rss>

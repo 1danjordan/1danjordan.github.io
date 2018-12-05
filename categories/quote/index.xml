@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Quote on Dan Jordan</title>
+    <link>/categories/quote/</link>
+    <description>Recent content in Quote on Dan Jordan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Mon, 15 May 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/quote/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Consumption</title>
+      <link>/post/2017-05-15-consumption/</link>
+      <pubDate>Mon, 15 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2017-05-15-consumption/</guid>
+      <description>A favourite quote of mine. It goes a long way to explaining a lot.
+Consumption is the sole end to all production
+Adam Smith, The Wealth of Nations  </description>
+    </item>
+    
+    <item>
+      <title>The Competent Man</title>
+      <link>/post/2017-05-08-the-competent-man/</link>
+      <pubDate>Mon, 08 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2017-05-08-the-competent-man/</guid>
+      <description>My favourite quote of all time is from Robert Heinlein&amp;rsquo;s novel &amp;lsquo;Time Enough for Love&amp;rsquo;. The lines are spoken by the character Lazarus Long depicting the competent man, a man who can do anything.
+A human being should be able to change a diaper, plan an invasion, butcher a hog, conn a ship, design a building, write a sonnet, balance accounts, build a wall, set a bone, comfort the dying, take orders, give orders, cooperate, act alone, solve equations, analyze a new problem, pitch manure, program a computer, cook a tasty meal, fight efficiently, die gallantly.</description>
+    </item>
+    
+    <item>
+      <title>The Marginal Cost of Software</title>
+      <link>/post/2017-05-08-marginal-cost-of-software/</link>
+      <pubDate>Mon, 01 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2017-05-08-marginal-cost-of-software/</guid>
+      <description>Recently I was listening to the podcast Opensource Craft, on which Dirk Eddelbuettel was a guest. Dirk is a prolific contributor to R community. Just check out his Github and his insane commit history. Dirk&amp;rsquo;s PhD is in econometrics, and on this podcast he makes a very insightful point, drawing from his experience of economics and OSS development, that I wanted to preserve here:
+In economics a thing we get into the heads of first year students is basically, that everything changes until you hit an equilibrium of &amp;lsquo;marginal cost equals the marginal benefit&amp;rsquo;.</description>
+    </item>
+    
+  </channel>
+</rss>

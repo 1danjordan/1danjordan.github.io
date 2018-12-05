@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Book Review on Dan Jordan</title>
+    <link>/categories/book-review/</link>
+    <description>Recent content in Book Review on Dan Jordan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Mon, 03 Apr 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/book-review/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Book Review: Introduction to Empirical Bayes</title>
+      <link>/post/2017-04-03-book-review-introduction-to-empirical-bayes/</link>
+      <pubDate>Mon, 03 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2017-04-03-book-review-introduction-to-empirical-bayes/</guid>
+      <description>“Have you ever tried to learn math from Wikipedia?”.
+  -- -- -- This is how David Robinson opens his tremendous book Introduction to Empirical Bayes. This sentiment is the foundation the book builds on; learning through terse academic text is hard, learning through interactive, motivated and visual problems is fun. Robinson’s book moves at a perfect pace, within a familiar context (the R console) using an intuitive example set (baseball).</description>
+    </item>
+    
+  </channel>
+</rss>
