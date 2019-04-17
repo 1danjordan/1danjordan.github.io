@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+<head>
+<title>Dan Jordan - Ainmneacha Naíonán na hÉireann</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="Dan Jordan">
+<meta name="generator" content="Hugo 0.51" />
+
+  
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+
+
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/envisioned.css">
+<link rel="stylesheet" href="/css/hugo-envisioned.css">
+<link rel="stylesheet" href="/css/hugo-envisioned-override.css">
+
+</head>
+
+
+<body>
+<div id="layout" class="pure-g">
+<article class="pure-u-1">
+<header class="brand">
+</header>
+
+<section>
+    <div id="top-of-post">
+        <a href="/"><i class="fa fa-chevron-left" aria-hidden="true";></i></a>
+        <h1 class="content-title">
+        
+        Ainmneacha Naíonán na hÉireann
+        
+        </h1>
+        
+        <p class=subtitle>A small R package on Irish demography</p>
+        
+    </div>
+  <span class="content-meta">
+
+    
+
+
+    
+      <i class="fa fa-calendar"></i>
+      &nbsp;Mar 1, 2019
+    
+
+
+    
+      
+      <i class="fa fa-tags"> </i>
+      
+        <a  href="/categories/r">R</a>
+      
+        <a  href="/categories/package">package</a>
+      
+    
+  </span>
+
+
+</section>
+
+
+
+<section>
+
+
+<p>I’ve made a new R package called <a href="https://github.com/dandermotj/irishbabynames"><code>irishbabynames</code></a>. Install it with:</p>
+<pre class="r"><code>remotes::install_github(&quot;1danjordan/irishbabynames&quot;)</code></pre>
+<p>This package contains three datasets:</p>
+<ul>
+<li><code>babynames</code> - count of each baby name in Ireland from 1964</li>
+<li><code>migration</code> - migration statistics by gender and age group from 1987</li>
+<li><code>population</code> - population statistics by sex and age from 1926</li>
+</ul>
+<p>This is only available on Github and I’ve no plans on publishing it on CRAN for the moment. I’ve wanted to make a data package for a while now, and this week the Irish CSO had a big <a href="https://www.cso.ie/en/releasesandpublications/ep/p-ibn/irishbabiesnames2018/">press release</a> about the statistics for 2018.</p>
+<p><img src="/post/2019-03-01-ainmneacha-na%C3%ADon%C3%A1n-na-h%C3%A9ireann_files/figure-html/unnamed-chunk-1-1.png" width="672"  /></p>
+<div id="an-evenings-work" class="section level2">
+<h2>An Evenings Work</h2>
+<p>
+<span class="marginnote shownote"> <!--
+<div class="figure">--> <img src="/post/2019-03-01-ainmneacha-na%C3%ADon%C3%A1n-na-h%C3%A9ireann_files/figure-html/unnamed-chunk-2-1.png" alt=" " width="384"  /> <!--
+<p class="caption marginnote">--> <!--</p>--> <!--</div>--></span>
+</p>
+<p>It only took an hour or so to scrape the data from the CSO website and pull the package together. With Rstudio and packages like <code>usethis</code>, creating a package couldn’t be easier. Oddly enough the Irish CSO publish data in a format called PC-AXIS, which I had never heard of until yesterday. This was the only challenge really but luckily for me, as always CRAN provides. the <a href="https://cran.r-project.org/web/packages/pxR/index.html">pxR</a> made it simple to read the file in and transform it into a data frame.</p>
+<p>I gathered this particular datasets into a package because I think they capture a lot of Ireland’s story in the second half of the 20th century. We might be able to do some nice analysis with it - maybe model the probability of emigrating Ireland given a particular name, sex and age? If nothing else, I’ve made a few nice plots with it.</p>
+<p>This is pretty much an exact rip-off of Hadley Wickham’s <code>babynames</code> package. But let’s call it inspiration instead. As they say, imitation is the sincerest form of flattery.</p>
+<p><img src="/post/2019-03-01-ainmneacha-na%C3%ADon%C3%A1n-na-h%C3%A9ireann_files/figure-html/unnamed-chunk-3-1.png" width="672"  /></p>
+</div>
+</section>
+<section>
+  
+
+  <footer class="page-footer">
+		<hr>
+		<ul class="page-footer-menu">
+		
+      <li><a href="https://github.com/1danjordan/"><i class='fa fa-github fa-2x'></i> </a></li>
+		
+      <li><a href="https://twitter.com/1danjordan"><i class='fa fa-twitter fa-2x'></i> </a></li>
+		
+		</ul>
+
+  
+    <p>
+      Powered by <a href="https://gohugo.io">Hugo</a> and the
+      <a href="https://github.com/dandermotj/hugo-envisioned">Envisioned theme</a>.
+    </p>
+  
+
+	<div class="copyright">
+	<p>
+    
+      &copy; 2019
+    Copyright Holder.
+    All rights reserved.
+    
+  </p>
+</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script>
+hljs.configure({languages: []});
+hljs.initHighlightingOnLoad();
+</script>
+
+</section>
+</article>
+</div>
+</body>
+</html>

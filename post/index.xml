@@ -5,10 +5,21 @@
     <link>/post/</link>
     <description>Recent content in Posts on Dan Jordan</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Wed, 18 Apr 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 01 Mar 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Ainmneacha Naíonán na hÉireann</title>
+      <link>/post/ainmneacha-na%C3%ADon%C3%A1n-na-h%C3%A9ireann/</link>
+      <pubDate>Fri, 01 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/ainmneacha-na%C3%ADon%C3%A1n-na-h%C3%A9ireann/</guid>
+      <description>I’ve made a new R package called irishbabynames. Install it with:
+remotes::install_github(&amp;quot;1danjordan/irishbabynames&amp;quot;) This package contains three datasets:
+ babynames - count of each baby name in Ireland from 1964 migration - migration statistics by gender and age group from 1987 population - population statistics by sex and age from 1926  This is only available on Github and I’ve no plans on publishing it on CRAN for the moment. I’ve wanted to make a data package for a while now, and this week the Irish CSO had a big press release about the statistics for 2018.</description>
+    </item>
     
     <item>
       <title>Tufte Handout</title>

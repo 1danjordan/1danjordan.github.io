@@ -115,9 +115,11 @@ MathJax.Hub.Config({
 <p>Jim Hester’s <a href="https://www.github.com/jimhester/typeCheck">TypeCheck</a> package brings type checking to R in a simple and elegant way and provides meaningful error messages out of the box. TypeCheck is built on the <code>?</code> operator from Hester’s <a href="https://www.github.com/jimhester/types">types</a> package.</p>
 <p>R is a dynamically typed language. Being dynamically typed is an important and necessary design choice for R as an interactive programming environment. However, the option to enforce types makes larger, more complicated codebases easier to debug and expand.</p>
 <pre class="r"><code># install.packages(&quot;types&quot;)
-library(types)
-# devtools::install_github(&quot;jim_hester/typeCheck&quot;)
+library(types)</code></pre>
+<pre><code>## Error in library(types): there is no package called &#39;types&#39;</code></pre>
+<pre class="r"><code># devtools::install_github(&quot;jim_hester/typeCheck&quot;)
 library(typeCheck)</code></pre>
+<pre><code>## Error in library(typeCheck): there is no package called &#39;typeCheck&#39;</code></pre>
 <p>An annotated function looks like this</p>
 <pre class="r"><code>f &lt;- function(x = ? numeric) x + 1
 f(1)</code></pre>
@@ -125,16 +127,18 @@ f(1)</code></pre>
 <p>Right now the function is only annotated, but this annotation doesn’t do anything yet - we haven’t defined a <code>numeric</code> type and the function is not type checked. We define a type with <code>type_define</code> and type check a function with <code>type_check</code>.</p>
 <div id="using-type_define-type_check" class="section level3">
 <h3>Using type_define &amp; type_check</h3>
-<pre class="r"><code>type.numeric   &lt;- type_define(check = is.numeric)
-f_type_checked &lt;- type_check(f)</code></pre>
+<pre class="r"><code>type.numeric   &lt;- type_define(check = is.numeric)</code></pre>
+<pre><code>## Error in type_define(check = is.numeric): could not find function &quot;type_define&quot;</code></pre>
+<pre class="r"><code>f_type_checked &lt;- type_check(f)</code></pre>
+<pre><code>## Error in type_check(f): could not find function &quot;type_check&quot;</code></pre>
 <p><code>type</code> is an S3 generic, and here we’re defining the <code>type.numeric</code> method. In our case we are checking that the object is numeric with the <code>is.numeric</code> primitive.</p>
 <p>Let’s try our <code>f_type_checked</code> function with some different inputs.</p>
 <pre class="r"><code>f_type_checked(1)</code></pre>
-<pre><code>## [1] 2</code></pre>
+<pre><code>## Error in f_type_checked(1): could not find function &quot;f_type_checked&quot;</code></pre>
 <pre class="r"><code>f_type_checked(&quot;a&quot;)</code></pre>
-<pre><code>## Error: `x` is a `character` not a `numeric`.</code></pre>
+<pre><code>## Error in f_type_checked(&quot;a&quot;): could not find function &quot;f_type_checked&quot;</code></pre>
 <pre class="r"><code>f_type_checked(TRUE)</code></pre>
-<pre><code>## Error: `x` is a `logical` not a `numeric`.</code></pre>
+<pre><code>## Error in f_type_checked(TRUE): could not find function &quot;f_type_checked&quot;</code></pre>
 <p>We get really clear and explicit error messages straight away, making it easy to see what is going wrong in our code.</p>
 </div>
 <div id="creating-your-own-types" class="section level3">
@@ -160,22 +164,22 @@ f_type_checked &lt;- type_check(f)</code></pre>
       # all elements in x are on the interval [0,1]
       all(x &gt;= 0 &amp; x &lt;=1)
       )
-  })
-
-f &lt;- function(x = ? probability) x
-f &lt;- type_check(f)
-
-# Test that the type works
+  })</code></pre>
+<pre><code>## Error in type_define(check = function(x) {: could not find function &quot;type_define&quot;</code></pre>
+<pre class="r"><code>f &lt;- function(x = ? probability) x
+f &lt;- type_check(f)</code></pre>
+<pre><code>## Error in type_check(f): could not find function &quot;type_check&quot;</code></pre>
+<pre class="r"><code># Test that the type works
 f(0.3)</code></pre>
 <pre><code>## [1] 0.3</code></pre>
 <pre class="r"><code>f(c(0.5, 0.2, 1))</code></pre>
 <pre><code>## [1] 0.5 0.2 1.0</code></pre>
 <pre class="r"><code>f(c(0.5, 2))</code></pre>
-<pre><code>## Error: `x` is a `double` not a `probability`.</code></pre>
+<pre><code>## [1] 0.5 2.0</code></pre>
 <pre class="r"><code>f(&quot;a&quot;)</code></pre>
-<pre><code>## Error: `x` is a `character` not a `probability`.</code></pre>
+<pre><code>## [1] &quot;a&quot;</code></pre>
 <pre class="r"><code>f(TRUE)</code></pre>
-<pre><code>## Error: `x` is a `logical` not a `probability`.</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 <p>The little tests show the probability type does what we want it to. Now we can annotate our code with probability types! Here’s a simple function that computes the joint probability of two independent events.</p>
 <p><span class="math display">\[
 P(A \cap B) = P(A)P(B)
@@ -185,14 +189,14 @@ P(A \cap B) = P(A)P(B)
   x * y
 } ? probability
 
-joint_prob &lt;- type_check(joint_prob)
-
-joint_prob(0.3, 0.6)</code></pre>
-<pre><code>## [1] 0.18</code></pre>
+joint_prob &lt;- type_check(joint_prob)</code></pre>
+<pre><code>## Error in type_check(joint_prob): could not find function &quot;type_check&quot;</code></pre>
+<pre class="r"><code>joint_prob(0.3, 0.6)</code></pre>
+<pre><code>## Error in `?`({: no documentation of type &#39;0.18&#39; and topic &#39;probability&#39; (or error in processing help)</code></pre>
 <pre class="r"><code>joint_prob(1.5, 0.5)</code></pre>
-<pre><code>## Error: `x` is a `double` not a `probability`.</code></pre>
+<pre><code>## Error in `?`({: no documentation of type &#39;0.75&#39; and topic &#39;probability&#39; (or error in processing help)</code></pre>
 <pre class="r"><code>joint_prob(0.1, 4)</code></pre>
-<pre><code>## Error: `y` is a `double` not a `probability`.</code></pre>
+<pre><code>## Error in `?`({: no documentation of type &#39;0.4&#39; and topic &#39;probability&#39; (or error in processing help)</code></pre>
 <p>TypeCheck’s error messages are very handy, telling us which argument didn’t adhere to it’s type constraints. This makes debugging much easier!</p>
 <p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote"><span style="display: block;"><span class="math display"><span class="math display">\[Pr(X = k) = {n \choose k} p^k (1 - p)^{n-k}\]</span></span></span> <span style="display: block;">Where <span class="math inline"><span class="math inline">\(k\)</span></span> is the number of successes, <span class="math inline"><span class="math inline">\(n\)</span></span> the number of trials and <span class="math inline"><span class="math inline">\(p\)</span></span> is a probability.</span></span></p>
 <p>Let’s go further, by writing a typed <a href="https://en.wikipedia.org/wiki/Binomial_distribution">binomial distribution function</a>. The equivalent function in base R is <code>dbinom</code>.</p>
@@ -207,19 +211,20 @@ joint_prob(0.3, 0.6)</code></pre>
     )
   }
 )</code></pre>
+<pre><code>## Error in type_define(check = function(x) {: could not find function &quot;type_define&quot;</code></pre>
 <p>Now we have everything we need for our typed binomial distribution function.</p>
 <pre class="r"><code>binom_dist &lt;- function(p = ? probability, k = ? natural, n = ? natural) {
   choose(n, k) * p^k * (1 - p)^(n - k)
 } ? probability
 
-binom_dist &lt;- type_check(binom_dist)
-
-binom_dist(0.5, 1, 1)</code></pre>
-<pre><code>## [1] 0.5</code></pre>
+binom_dist &lt;- type_check(binom_dist)</code></pre>
+<pre><code>## Error in type_check(binom_dist): could not find function &quot;type_check&quot;</code></pre>
+<pre class="r"><code>binom_dist(0.5, 1, 1)</code></pre>
+<pre><code>## Error in `?`({: no documentation of type &#39;0.5&#39; and topic &#39;probability&#39; (or error in processing help)</code></pre>
 <pre class="r"><code>binom_dist(2L, 1, 1)</code></pre>
-<pre><code>## Error: `p` is a `integer` not a `probability`.</code></pre>
+<pre><code>## Error in `?`({: no documentation of type &#39;2&#39; and topic &#39;probability&#39; (or error in processing help)</code></pre>
 <pre class="r"><code>binom_dist(0.5, -2, 0)</code></pre>
-<pre><code>## Error: `k` is a `double` not a `natural`.</code></pre>
+<pre><code>## Error in `?`({: no documentation of type &#39;0&#39; and topic &#39;probability&#39; (or error in processing help)</code></pre>
 </div>
 <div id="conclusion" class="section level3">
 <h3>Conclusion</h3>
@@ -234,7 +239,7 @@ binom_dist(0.5, 1, 1)</code></pre>
 		<hr>
 		<ul class="page-footer-menu">
 		
-      <li><a href="https://github.com/dandermotj/"><i class='fa fa-github fa-2x'></i> </a></li>
+      <li><a href="https://github.com/1danjordan/"><i class='fa fa-github fa-2x'></i> </a></li>
 		
       <li><a href="https://twitter.com/1danjordan"><i class='fa fa-twitter fa-2x'></i> </a></li>
 		
@@ -250,7 +255,7 @@ binom_dist(0.5, 1, 1)</code></pre>
 	<div class="copyright">
 	<p>
     
-      &copy; 2018
+      &copy; 2019
     Copyright Holder.
     All rights reserved.
     

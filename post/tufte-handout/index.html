@@ -114,7 +114,7 @@ MathJax.Hub.Config({
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>The Tufte handout style is a style that Edward Tufte uses in his books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography. This style has been implemented in LaTeX and HTML/CSS<label for="tufte-sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="tufte-sn-1" class="margin-toggle"><span class="sidenote"> See Github repositories <a href="https://github.com/tufte-latex/tufte-latex">tufte-latex</a> and <a href="https://github.com/edwardtufte/tufte-css">tufte-css</a></span>, respectively. We have ported both implementations into the <a href="https://github.com/rstudio/tufte"><strong>tufte</strong> package</a>. If you want LaTeX/PDF output, you may use the <code>tufte_handout</code> format for handouts, and <code>tufte_book</code> for books. For HTML output, use <code>tufte_html</code>. These formats can be either specified in the YAML metadata at the beginning of an R Markdown document (see an example below), or passed to the <code>rmarkdown::render()</code> function. See <span class="citation">Allaire et al. (<label for="tufte-mn-1" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle">2018<span class="marginnote">Allaire, JJ, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, and Winston Chang. 2018. <em>Rmarkdown: Dynamic Documents for R</em>. <a href="https://CRAN.R-project.org/package=rmarkdown" class="uri">https://CRAN.R-project.org/package=rmarkdown</a>.</span>)</span> more information about <strong>rmarkdown</strong>.</p>
+<p>The Tufte handout style is a style that Edward Tufte uses in his books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography. This style has been implemented in LaTeX and HTML/CSS<label for="tufte-sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="tufte-sn-1" class="margin-toggle"><span class="sidenote"> See Github repositories <a href="https://github.com/tufte-latex/tufte-latex">tufte-latex</a> and <a href="https://github.com/edwardtufte/tufte-css">tufte-css</a></span>, respectively. We have ported both implementations into the <a href="https://github.com/rstudio/tufte"><strong>tufte</strong> package</a>. If you want LaTeX/PDF output, you may use the <code>tufte_handout</code> format for handouts, and <code>tufte_book</code> for books. For HTML output, use <code>tufte_html</code>. These formats can be either specified in the YAML metadata at the beginning of an R Markdown document (see an example below), or passed to the <code>rmarkdown::render()</code> function. See <span class="citation">Allaire et al. (<label for="tufte-mn-1" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle">2019<span class="marginnote">Allaire, JJ, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, Winston Chang, and Richard Iannone. 2019. <em>Rmarkdown: Dynamic Documents for R</em>. <a href="https://CRAN.R-project.org/package=rmarkdown" class="uri">https://CRAN.R-project.org/package=rmarkdown</a>.</span>)</span> more information about <strong>rmarkdown</strong>.</p>
 <pre class="yaml"><code>---
 title: &quot;An Example Using the Tufte Style&quot;
 author: &quot;John Smith&quot;
@@ -193,7 +193,7 @@ A figure in the main column.
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
-<p>References can be displayed as margin notes for HTML output. For example, we can cite R here <span class="citation">(R Core Team <label for="tufte-mn-4" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-4" class="margin-toggle">2018<span class="marginnote">R Core Team. 2018. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/" class="uri">https://www.R-project.org/</a>.</span>)</span>. To enable this feature, you must set <code>link-citations: yes</code> in the YAML metadata, and the version of <code>pandoc-citeproc</code> should be at least 0.7.2. You can always install your own version of Pandoc from <a href="http://pandoc.org/installing.html" class="uri">http://pandoc.org/installing.html</a> if the version is not sufficient. To check the version of <code>pandoc-citeproc</code> in your system, you may run this in R:</p>
+<p>References can be displayed as margin notes for HTML output. For example, we can cite R here <span class="citation">(R Core Team <label for="tufte-mn-4" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-4" class="margin-toggle">2019<span class="marginnote">R Core Team. 2019. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/" class="uri">https://www.R-project.org/</a>.</span>)</span>. To enable this feature, you must set <code>link-citations: yes</code> in the YAML metadata, and the version of <code>pandoc-citeproc</code> should be at least 0.7.2. You can always install your own version of Pandoc from <a href="http://pandoc.org/installing.html" class="uri">http://pandoc.org/installing.html</a> if the version is not sufficient. To check the version of <code>pandoc-citeproc</code> in your system, you may run this in R:</p>
 <pre class="r"><code>system2(&#39;pandoc-citeproc&#39;, &#39;--version&#39;)</code></pre>
 <p>If your version of <code>pandoc-citeproc</code> is too low, or you did not set <code>link-citations: yes</code> in YAML, references in the HTML output will be placed at the end of the output document.</p>
 </div>
@@ -678,7 +678,7 @@ p + geom_smooth(method = &#39;lm&#39;) + facet_grid(~ gear)</code></pre>
 		<hr>
 		<ul class="page-footer-menu">
 		
-      <li><a href="https://github.com/dandermotj/"><i class='fa fa-github fa-2x'></i> </a></li>
+      <li><a href="https://github.com/1danjordan/"><i class='fa fa-github fa-2x'></i> </a></li>
 		
       <li><a href="https://twitter.com/1danjordan"><i class='fa fa-twitter fa-2x'></i> </a></li>
 		
@@ -694,7 +694,7 @@ p + geom_smooth(method = &#39;lm&#39;) + facet_grid(~ gear)</code></pre>
 	<div class="copyright">
 	<p>
     
-      &copy; 2018
+      &copy; 2019
     Copyright Holder.
     All rights reserved.
     
